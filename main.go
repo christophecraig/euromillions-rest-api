@@ -40,7 +40,7 @@ func main() {
 		log.Print(err) 
 	}
 	defer db.Close()
-	query := "SELECT * FROM results"
+	query := "SELECT * FROM results order by date DESC"
 	var(
 		id int 
 		b1 int
