@@ -1,8 +1,7 @@
 <?php
 
 $db = new PDO('mysql:dbname=euromillions;host=127.0.0.1', 'root', 'root');
-var_dump($db);
-$file = fopen('/Users/christophe/Projects/euromillions/euromillions_4.csv', 'r');
+$file = fopen('./euromillions_4.csv', 'r');
 $csv = fgetcsv($file, 0, ';');
 while ($row = fgetcsv($file, 0, ';')) {
   $query = 'insert into results (b1, b2, b3, b4, b5, e1, e2, myMillion, date, weekday) values ('.
@@ -14,8 +13,9 @@ while ($row = fgetcsv($file, 0, ';')) {
   '.$row[10].',
   '.$row[11].',
   "'.$row[73].'",
-  "'.$row[2].'",
+  STR_TO_DATE("'.$row[2].'", "%d/%m/%Y"),
   "'.trim($row[1]).'"
   )';
+  // var_dump($query);
  $db->exec($query);
 }
