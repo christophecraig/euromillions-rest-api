@@ -74,6 +74,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/results/", GetResults).Methods("GET")
 	router.HandleFunc("/results/{id}", GetResult).Methods("GET")
+	router.HandleFunc("/results/last", GetLastResult).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
@@ -84,12 +85,21 @@ func GetResults(w http.ResponseWriter, r *http.Request) {
 func GetResult(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	params := mux.Vars(r)
-	for _, item := range results {
-		// fmt.Sprintf pour passer l'int en string
-		if fmt.Sprintf("%d", item.ID) == params["id"] {
-			json.NewEncoder(w).Encode(item)
+	if (params["id"] == "last") {
+		json.NewEncoder(w).Encode(results[0])
+	} else {
+		for _, item := range results {
+			// fmt.Sprintf pour passer l'int en string
+			if fmt.Sprintf("%d", item.ID) == params["id"] {
+				json.NewEncoder(w).Encode(item)
+			}
 		}
 	}
+}
+func GetLastResult(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
+	log.Print("results")
+	json.NewEncoder(w).Encode(results)
 }
 
 // func CreatePerson(w http.ResponseWriter, r *http.Request) {
